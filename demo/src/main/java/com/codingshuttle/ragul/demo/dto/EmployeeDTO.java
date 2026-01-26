@@ -9,6 +9,9 @@ public class EmployeeDTO {
     private String email;
     private Integer age;
 
+    private LocalDate dateOfJoining;
+    private Boolean isActive;
+
     public EmployeeDTO() {
     }
 
@@ -69,6 +72,5 @@ public class EmployeeDTO {
         isActive = active;
     }
 
-    private LocalDate dateOfJoining;
-    private Boolean isActive;
+
 }
