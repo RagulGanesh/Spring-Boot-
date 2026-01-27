@@ -3,6 +3,7 @@ package com.codingshuttle.ragul.demo.controllers;
 import com.codingshuttle.ragul.demo.dto.EmployeeDTO;
 import com.codingshuttle.ragul.demo.entities.EmployeeEntity;
 import com.codingshuttle.ragul.demo.repositories.EmployeeRepository;
+import com.codingshuttle.ragul.demo.services.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -17,32 +18,32 @@ public class EmployeeController {
 //        return "Secret Message";
 //    }
 
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
 
     //@GetMapping("/employees/{employeeId}")
     @GetMapping("/{employeeId}")
-    public EmployeeEntity getEmployeeById(@PathVariable(name = "employeeId") Long id){
+    public EmployeeDTO getEmployeeById(@PathVariable(name = "employeeId") Long id){
         //return new EmployeeDTO(id,"Ragul","ragul@gmail.com",3, LocalDate.of(2025,1,26),true);
-        return employeeRepository.findById(id).orElse(null);
+        return employeeService.getEmployeeById(id);
     }
 
     //@GetMapping(path = "/employees")
     @GetMapping(path = "")
-    public List<EmployeeEntity> getALlEmployees(@RequestParam(required = false, name = "inputAge") Integer age,
+    public List<EmployeeDTO> getALlEmployees(@RequestParam(required = false, name = "inputAge") Integer age,
                                                 @RequestParam(required = false) String sortBy){
         //return "Hi age " + age + " " + sortBy;
-        return employeeRepository.findAll();
+        return employeeService.getAllEmployees();
     }
 
     @PostMapping
-    public EmployeeEntity createEmployee(@RequestBody EmployeeEntity inputEmployeeDTO){
+    public EmployeeDTO createEmployee(@RequestBody EmployeeDTO inputEmployeeDTO){
         //return inputEmployeeDTO;
-        return employeeRepository.save(inputEmployeeDTO);
+        return employeeService.creteEmployee(inputEmployeeDTO);
     }
 
     @PutMapping
