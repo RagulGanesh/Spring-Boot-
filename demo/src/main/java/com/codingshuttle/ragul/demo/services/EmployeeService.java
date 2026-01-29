@@ -2,13 +2,12 @@ package com.codingshuttle.ragul.demo.services;
 
 import com.codingshuttle.ragul.demo.dto.EmployeeDTO;
 import com.codingshuttle.ragul.demo.entities.EmployeeEntity;
+import com.codingshuttle.ragul.demo.exceptions.ResourceNotFoundException;
 import com.codingshuttle.ragul.demo.repositories.EmployeeRepository;
-import org.h2.engine.Mode;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
-import javax.management.modelmbean.ModelMBean;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +45,7 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployeeById(EmployeeDTO employeeDTO, Long id) {
+        isExistsByEmployeeById(id);
         EmployeeEntity employeeEntity;
         EmployeeEntity toSaveEntity;
         if(employeeRepository.findById(id).isPresent()){
@@ -61,19 +61,18 @@ public class EmployeeService {
     }
 
     public boolean deleteEmployeeById(Long employeeId) {
-        boolean exist = employeeRepository.existsById(employeeId);
-        if(!exist) return false;
+        isExistsByEmployeeById(employeeId);
         employeeRepository.deleteById(employeeId);
         return true;
     }
 
-    public boolean isExistsByEmployeeById(Long employeeId){
-        return employeeRepository.existsById(employeeId);
+    public void isExistsByEmployeeById(Long employeeId){
+        boolean exists = employeeRepository.existsById(employeeId);
+        if(!exists) throw new ResourceNotFoundException("Employee not found with id : "+employeeId);
     }
 
     public EmployeeDTO updatePartialEmployeeById(Long employeeId, Map<String, Object> updates) {
-        boolean exists = isExistsByEmployeeById(employeeId);
-        if(!exists) return null;
+        isExistsByEmployeeById(employeeId);
         EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
         updates.forEach((field,value)->{
             Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class,field);

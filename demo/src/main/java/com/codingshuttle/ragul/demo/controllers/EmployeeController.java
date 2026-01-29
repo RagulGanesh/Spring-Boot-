@@ -2,6 +2,7 @@ package com.codingshuttle.ragul.demo.controllers;
 
 import com.codingshuttle.ragul.demo.dto.EmployeeDTO;
 import com.codingshuttle.ragul.demo.entities.EmployeeEntity;
+import com.codingshuttle.ragul.demo.exceptions.ResourceNotFoundException;
 import com.codingshuttle.ragul.demo.repositories.EmployeeRepository;
 import com.codingshuttle.ragul.demo.services.EmployeeService;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/employees")
@@ -34,9 +36,17 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable(name = "employeeId") Long id){
         //return new EmployeeDTO(id,"Ragul","ragul@gmail.com",3, LocalDate.of(2025,1,26),true);\
         EmployeeDTO employeeDTO =  employeeService.getEmployeeById(id);
-        if(employeeDTO == null) return ResponseEntity.notFound().build();
+        //if(employeeDTO == null) return ResponseEntity.notFound().build();
+        if(employeeDTO == null){
+            throw new ResourceNotFoundException("Employee was not found with id : "+id);
+        }
         return ResponseEntity.ok(employeeDTO);
     }
+
+//    @ExceptionHandler(NoSuchElementException.class)
+//    public ResponseEntity<String> handleEmployeeNotFound(NoSuchElementException exception){
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee Not Found");
+//    }
 
     //@GetMapping(path = "/employees")
     @GetMapping(path = "")
