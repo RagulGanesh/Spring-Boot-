@@ -23,8 +23,11 @@ public class EmployeeEntity {
     private String email;
     private Integer age;
 
+    private String role;
+
     private LocalDate dateOfJoining;
     //@JsonProperty("isActive")
+    Double salary;
     private Boolean isActive;
 
     public Long getId() {
@@ -73,5 +76,21 @@ public class EmployeeEntity {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
     }
 }

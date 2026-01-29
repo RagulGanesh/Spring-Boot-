@@ -4,6 +4,7 @@ import com.codingshuttle.ragul.demo.dto.EmployeeDTO;
 import com.codingshuttle.ragul.demo.entities.EmployeeEntity;
 import com.codingshuttle.ragul.demo.repositories.EmployeeRepository;
 import com.codingshuttle.ragul.demo.services.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO inputEmployeeDTO){
+    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody @Valid EmployeeDTO inputEmployeeDTO){
         //return inputEmployeeDTO;
         EmployeeDTO employeeDTO = employeeService.creteEmployee(inputEmployeeDTO);
         return new ResponseEntity<>(employeeDTO, HttpStatus.CREATED);
